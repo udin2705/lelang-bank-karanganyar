@@ -37,24 +37,30 @@
       ? `<div class="lelang-date-mini">&#128197; Lelang: ${formatTanggal(asset.tanggal_lelang)}</div>`
       : '';
     const terjualBadge = isTerjual ? `<span class="badge-terjual">TERJUAL</span>` : '';
+    const shareCardHtml = typeof buildShareWidgetHtml === 'function' ? buildShareWidgetHtml(asset, { compact: true }) : '';
 
     return `
-      <a class="asset-card ${isTerjual ? 'is-sold' : ''}" href="/detail.html?id=${asset.id}">
-        <div class="thumb-wrap">
+      <div class="asset-card ${isTerjual ? 'is-sold' : ''}" onclick="if(!event.target.closest('.share-wrap')){window.location.href='/detail.html?id=${asset.id}'}" role="link" tabindex="0">
+        <a class="thumb-wrap" href="/detail.html?id=${asset.id}">
           <img src="${img}" alt="${asset.judul}" loading="lazy" onerror="this.src='${placeholderImage()}'">
           <span class="badge ${asset.tipe_penjualan}">${tipePenjualanLabel(asset.tipe_penjualan)}</span>
           <span class="badge-kategori">${kategoriLabel(asset.kategori)}</span>
           ${terjualBadge}
-        </div>
+        </a>
         <div class="info">
           <p class="loc">${lokasi}</p>
-          <h3>${asset.judul}</h3>
-          <span class="price-label">${hargaLabel(asset.tipe_penjualan)}</span>
-          <p class="price">${formatRupiah(asset.harga)}</p>
+          <h3><a href="/detail.html?id=${asset.id}">${asset.judul}</a></h3>
+          <div class="card-price-share-row">
+            <div>
+              <span class="price-label">${hargaLabel(asset.tipe_penjualan)}</span>
+              <p class="price" style="margin-bottom:0;">${formatRupiah(asset.harga)}</p>
+            </div>
+            ${shareCardHtml}
+          </div>
           ${jadwalHtml}
           <div class="spec-row">${specHtml}</div>
         </div>
-      </a>
+      </div>
     `;
   }
 

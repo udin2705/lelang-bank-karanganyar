@@ -40,6 +40,26 @@
       </table>`;
   }
 
+  function updateClientMetaTags(asset, lokasi, images) {
+    const ogTitleText = `${asset.judul} - ${formatRupiah(asset.harga)}`;
+    const rawDesc = (asset.deskripsi || '').replace(/\s+/g, ' ').trim();
+    const ogDescText = `[${tipePenjualanLabel(asset.tipe_penjualan)}] ${formatRupiah(asset.harga)} • Lokasi: ${lokasi} • ${rawDesc || 'Aset Jaminan PT. BPR Bank Karanganyar (Perseroda)'}`.slice(0, 220);
+    const firstImg = images && images.length ? images[0] : '/img/logo.png';
+    const absImgUrl = firstImg.startsWith('http') ? firstImg : `${window.location.origin}${firstImg}`;
+    const pageUrl = `${window.location.origin}/detail.html?id=${encodeURIComponent(asset.id)}`;
+
+    const setMeta = (selector, attr, val) => {
+      let el = document.querySelector(selector);
+      if (el) el.setAttribute(attr, val);
+    };
+
+    setMeta('meta[property="og:title"]', 'content', ogTitleText);
+    setMeta('meta[property="og:description"]', 'content', ogDescText);
+    setMeta('meta[property="og:image"]', 'content', absImgUrl);
+    setMeta('meta[property="og:url"]', 'content', pageUrl);
+    setMeta('meta[name="description"]', 'content', ogDescText);
+  }
+
   function render(asset) {
     document.title = `${asset.judul} - Portal BPR Bank Karanganyar`;
 
@@ -61,6 +81,8 @@
 
     const kecLabel = asset.kecamatan ? `Kec. ${asset.kecamatan.replace(/^Kecamatan\s+/i, '')}` : '';
     const lokasi = [kecLabel, asset.kabupaten_kota, asset.provinsi].filter(Boolean).join(', ') || '-';
+    updateClientMetaTags(asset, lokasi, images);
+    const shareWidgetHtml = typeof buildShareWidgetHtml === 'function' ? buildShareWidgetHtml(asset) : '';
     const specSidebar = asset.kategori === 'kendaraan'
       ? `<div class="spec-item"><b>${asset.tahun || '-'}</b>Tahun</div><div class="divider"></div><div class="spec-item"><b>${asset.merk || '-'}</b>Merk</div>`
       : `<div class="spec-item"><b>LT ${asset.luas_tanah || '-'}</b>m&sup2;</div><div class="divider"></div><div class="spec-item"><b>LB ${asset.luas_bangunan || '-'}</b>m&sup2;</div>`;
@@ -96,17 +118,24 @@
 
         <aside class="price-card">
           <div class="top">
-            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
-              <span class="tag ${asset.tipe_penjualan}" style="margin-bottom:0;">${tipePenjualanLabel(asset.tipe_penjualan)}</span>
-              <span class="status-pill ${asset.status}">${statusLabel(asset.status)}</span>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:10px;">
+              <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                <span class="tag ${asset.tipe_penjualan}" style="margin-bottom:0;">${tipePenjualanLabel(asset.tipe_penjualan)}</span>
+                <span class="status-pill ${asset.status}">${statusLabel(asset.status)}</span>
+              </div>
             </div>
             <p class="loc">${lokasi}</p>
             <h2>${asset.judul}</h2>
             <p class="kode">Kode Aset: ${asset.kode_aset}</p>
           </div>
           <div class="body">
-            <span class="price-label">${hargaLabel(asset.tipe_penjualan)}</span>
-            <p class="harga">${formatRupiah(asset.harga)}</p>
+            <div class="price-share-row">
+              <div>
+                <span class="price-label">${hargaLabel(asset.tipe_penjualan)}</span>
+                <p class="harga" style="margin-bottom:0;">${formatRupiah(asset.harga)}</p>
+              </div>
+              ${shareWidgetHtml}
+            </div>
             ${lelangInfoHtml}
             <div class="spec-box">${specSidebar}</div>
             <a href="https://wa.me/${waPhone}?text=${encodeURIComponent('Saya tertarik dengan aset ' + asset.judul + ' (Kode: ' + asset.kode_aset + ')')}" target="_blank" rel="noopener noreferrer" class="btn-block btn-whatsapp">Hubungi Kami (WhatsApp)</a>
