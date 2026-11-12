@@ -27,6 +27,11 @@ function formatRupiahServer(angka) {
 // Mendukung reverse proxy (cPanel / Phusion Passenger / Nginx / Cloudflare)
 app.set('trust proxy', 1);
 
+app.use((req, res, next) => {
+  res.setHeader('ngrok-skip-browser-warning', 'true');
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -66,6 +71,8 @@ app.get('/detail.html', (req, res, next) => {
       const imageUrl = firstImg
         ? `${baseUrl}/uploads/${encodeURIComponent(firstImg.filename)}`
         : `${baseUrl}/img/logo.png`;
+      const imgExt = firstImg ? path.extname(firstImg.filename).toLowerCase() : '.png';
+      const imgMime = imgExt === '.png' ? 'image/png' : imgExt === '.webp' ? 'image/webp' : 'image/jpeg';
 
       const tipeLabel = asset.tipe_penjualan === 'lelang' ? 'Lelang' : 'Pra-Lelang';
       const hargaFormatted = formatRupiahServer(asset.harga);
@@ -88,7 +95,16 @@ app.get('/detail.html', (req, res, next) => {
         `<meta property="og:title" content="${escapeHtml(ogTitle)}">`,
         `<meta property="og:description" content="${escapeHtml(ogDescription)}">`,
         `<meta property="og:image" content="${escapeHtml(imageUrl)}">`,
+        `<meta property="og:image:secure_url" content="${escapeHtml(imageUrl)}">`,
+        `<meta property="og:image:type" content="${imgMime}">`,
+        `<meta property="og:image:width" content="1200">`,
+        `<meta property="og:image:height" content="630">`,
+        `<meta property="og:image:alt" content="${escapeHtml(ogTitle)}">`,
         `<meta property="og:url" content="${escapeHtml(pageUrl)}">`,
+        `<meta itemprop="name" content="${escapeHtml(ogTitle)}">`,
+        `<meta itemprop="description" content="${escapeHtml(ogDescription)}">`,
+        `<meta itemprop="image" content="${escapeHtml(imageUrl)}">`,
+        `<link rel="image_src" href="${escapeHtml(imageUrl)}">`,
         `<meta name="twitter:card" content="summary_large_image">`,
         `<meta name="twitter:title" content="${escapeHtml(ogTitle)}">`,
         `<meta name="twitter:description" content="${escapeHtml(ogDescription)}">`,

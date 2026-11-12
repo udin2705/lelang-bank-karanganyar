@@ -154,8 +154,7 @@ async function handleShareAsset(event, btnEl) {
     try {
       await navigator.share({
         title: shareTitle,
-        text: `${shareText}\n`,
-        url: url
+        text: `${shareText}\n${url}`
       });
       return;
     } catch (err) {

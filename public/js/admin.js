@@ -547,6 +547,54 @@
     if (e.target === formModal) closeModal();
   });
 
+  // Kompresi otomatis gambar di browser sebelum upload agar ukuran < 250KB (wajib agar muncul di preview WhatsApp)
+  function compressImageFile(file, maxDim = 1200, quality = 0.8) {
+    return new Promise((resolve) => {
+      if (!file || !file.type.startsWith('image/')) return resolve(file);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w >= h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) return resolve(file);
+              const baseName = file.name.replace(/\.[^.]+$/, '') || 'asset';
+              const compressedFile = new File([blob], `${baseName}.jpg`, {
+                type: 'image/jpeg',
+                lastModified: Date.now()
+              });
+              resolve(compressedFile);
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+        img.onerror = () => resolve(file);
+        img.src = ev.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
   assetForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     formAlertBox.innerHTML = '';
@@ -571,7 +619,10 @@
       const imagesInput = document.getElementById('imagesInput');
       if (imagesInput.files && imagesInput.files.length > 0) {
         const uploadFd = new FormData();
-        Array.from(imagesInput.files).forEach((file) => uploadFd.append('images', file));
+        const compressedFiles = await Promise.all(
+          Array.from(imagesInput.files).map((file) => compressImageFile(file))
+        );
+        compressedFiles.forEach((file) => uploadFd.append('images', file));
         await fetch(`/api/assets/${savedAsset.id}/images`, {
           method: 'POST',
           body: uploadFd,
