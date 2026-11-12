@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin - Portal Aset BPR Bank Karanganyar</title>
+<link rel="stylesheet" href="/css/style.css?v=8">
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="brand">
+      <div class="brand-logo"><img src="/img/logo.png" alt="Logo PT. BPR Bank Karanganyar (Perseroda)"></div>
+      <div style="margin-top:8px; font-size:0.9rem;">Admin Portal Aset</div>
+    </div>
+    <nav>
+      <a href="#" id="navDashboardAssets" class="active">&#128202; Dashboard Aset</a>
+      <a href="#" id="navAdminUsers">&#128101; Kelola Admin &amp; Password</a>
+      <a href="/" target="_blank">&#127760; Lihat Portal Publik</a>
+      <a href="#" id="logoutBtn">&#128274; Logout</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div id="sectionAssets">
+      <div class="admin-topbar">
+        <button class="nav-toggle" style="display:block; color:var(--text);" onclick="toggleAdminSidebar()">&#9776;</button>
+        <h1>Kelola Daftar Aset</h1>
+        <button class="btn btn-primary" id="btnAddAsset">+ Tambah Aset</button>
+      </div>
+
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="year-filter-bar" id="yearFilterBar"></div>
+
+      <div class="admin-card">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Kode</th>
+                <th>Judul</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="assetTableBody">
+              <tr><td colspan="7">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="sectionUsers" style="display:none;">
+      <div class="admin-topbar">
+        <button class="nav-toggle" style="display:block; color:var(--text);" onclick="toggleAdminSidebar()">&#9776;</button>
+        <h1>Kelola Admin &amp; Password</h1>
+      </div>
+
+      <div class="form-grid" style="margin-bottom:24px;">
+        <div class="admin-card">
+          <h3 style="margin-top:0; margin-bottom:14px;">&#128273; Ganti Password Saya</h3>
+          <div id="pwdAlertBox"></div>
+          <form id="changePasswordForm">
+            <div class="form-group">
+              <label>Password Lama *</label>
+              <input type="password" name="old_password" required autocomplete="current-password">
+            </div>
+            <div class="form-group">
+              <label>Password Baru * (min. 6 karakter)</label>
+              <input type="password" name="new_password" required minlength="6" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label>Konfirmasi Password Baru *</label>
+              <input type="password" name="confirm_password" required minlength="6" autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn btn-primary">Simpan Password Baru</button>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3 style="margin-top:0; margin-bottom:14px;">&#10133; Tambah User Admin Baru</h3>
+          <div id="userAlertBox"></div>
+          <form id="addUserForm">
+            <div class="form-group">
+              <label>Nama Lengkap / Jabatan *</label>
+              <input type="text" name="nama" required placeholder="Contoh: Admin Operasional">
+            </div>
+            <div class="form-group">
+              <label>Username Login *</label>
+              <input type="text" name="username" required placeholder="Contoh: admin_ops" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label>Password Awal * (min. 6 karakter)</label>
+              <input type="password" name="password" required minlength="6" autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn btn-primary">+ Tambah User Admin</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3 style="margin-top:0; margin-bottom:14px;">Daftar Akun Admin Terdaftar</h3>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Nama Lengkap</th>
+                <th>Dibuat Pada</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersTableBody">
+              <tr><td colspan="5">Memuat daftar admin...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal Form Tambah / Edit Aset -->
+<div class="modal-overlay" id="formModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="formModalTitle">Tambah Aset Baru</h2>
+      <button class="modal-close" id="closeFormModal">&times;</button>
+    </div>
+    <div id="formAlertBox"></div>
+    <form id="assetForm"></form>
+  </div>
+</div>
+
+<script src="/js/wilayah.js?v=8"></script>
+<script src="/js/common.js?v=8"></script>
+<script src="/js/admin.js?v=8"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="1600" height="500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.6" stroke-opacity="0.22"/>
+    </pattern>
+  </defs>
+
+  <!-- Subtle architectural grid -->
+  <rect width="1600" height="500" fill="url(#grid)"/>
+
+  <!-- Background distant city & hills -->
+  <path d="M0,430 Q260,340 540,410 T1120,380 T1600,410 L1600,500 L0,500 Z" fill="#ffffff" fill-opacity="0.18"/>
+
+  <!-- Left Side: Modern Property / Houses & Commercial Buildings -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="#ffffff" fill-opacity="0.16" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Tall office/apartment building -->
+    <rect x="40" y="140" width="95" height="290"/>
+    <line x1="62" y1="170" x2="62" y2="400" stroke-width="2"/>
+    <line x1="88" y1="170" x2="88" y2="400" stroke-width="2"/>
+    <line x1="114" y1="170" x2="114" y2="400" stroke-width="2"/>
+    <line x1="52" y1="200" x2="123" y2="200" stroke-width="1.5"/>
+    <line x1="52" y1="240" x2="123" y2="240" stroke-width="1.5"/>
+    <line x1="52" y1="280" x2="123" y2="280" stroke-width="1.5"/>
+    <line x1="52" y1="320" x2="123" y2="320" stroke-width="1.5"/>
+    <line x1="52" y1="360" x2="123" y2="360" stroke-width="1.5"/>
+
+    <!-- Modern 2-Story Residence (Rumah Hunian) -->
+    <polygon points="155,260 265,175 375,260"/>
+    <polygon points="235,215 315,155 395,215" fill-opacity="0.12"/>
+    <rect x="175" y="260" width="180" height="170"/>
+    <!-- Windows & Door -->
+    <rect x="200" y="285" width="48" height="42" fill-opacity="0.28"/>
+    <line x1="224" y1="285" x2="224" y2="327"/>
+    <line x1="200" y1="306" x2="248" y2="306"/>
+    <rect x="275" y="285" width="55" height="42" fill-opacity="0.28"/>
+    <line x1="302" y1="285" x2="302" y2="327"/>
+    <!-- Main Door & Carport -->
+    <rect x="205" y="355" width="38" height="75" fill-opacity="0.32"/>
+    <rect x="268" y="348" width="68" height="82" fill-opacity="0.2"/>
+    <line x1="268" y1="368" x2="336" y2="368"/>
+    <line x1="268" y1="388" x2="336" y2="388"/>
+    <line x1="268" y1="408" x2="336" y2="408"/>
+
+    <!-- Second House / Ruko -->
+    <polygon points="385,285 455,230 525,285"/>
+    <rect x="398" y="285" width="114" height="145"/>
+    <rect x="418" y="308" width="32" height="34" fill-opacity="0.25"/>
+    <rect x="462" y="308" width="32" height="34" fill-opacity="0.25"/>
+    <rect x="435" y="368" width="40" height="62" fill-opacity="0.25"/>
+
+    <!-- Trees & Landscape Left -->
+    <circle cx="560" cy="365" r="28" fill-opacity="0.22"/>
+    <circle cx="545" cy="380" r="20" fill-opacity="0.22"/>
+    <circle cx="575" cy="380" r="20" fill-opacity="0.22"/>
+    <line x1="560" y1="390" x2="560" y2="430" stroke-width="3"/>
+
+    <!-- Center-Left Modern House (Visible on Mobile & Desktop) -->
+    <polygon points="595,295 665,240 735,295"/>
+    <rect x="608" y="295" width="114" height="135"/>
+    <rect x="626" y="316" width="34" height="32" fill-opacity="0.26"/>
+    <rect x="672" y="316" width="34" height="32" fill-opacity="0.26"/>
+    <rect x="646" y="368" width="38" height="62" fill-opacity="0.28"/>
+  </g>
+
+  <!-- Right Side: Vehicles (SUV / Car & Motorcycle) + Property -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="#ffffff" fill-opacity="0.16" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Center-Right Compact Car (Visible on Mobile & Desktop) -->
+    <g transform="translate(745, 338) scale(0.72)">
+      <path d="M18,85 L44,42 Q54,28 76,28 L168,28 Q192,28 212,48 L256,58 Q272,62 275,78 L275,102 L235,102 A26,26 0 0,0 183,102 L92,102 A26,26 0 0,0 40,102 L12,102 L12,90 Z" fill-opacity="0.22"/>
+      <polygon points="52,72 66,38 124,38 124,72" fill-opacity="0.3"/>
+      <polygon points="134,38 184,38 210,72 134,72" fill-opacity="0.3"/>
+      <circle cx="66" cy="102" r="22" fill-opacity="0.32"/>
+      <circle cx="209" cy="102" r="22" fill-opacity="0.32"/>
+    </g>
+    <!-- Background Villa / Building on far right -->
+    <polygon points="1310,235 1425,155 1540,235"/>
+    <rect x="1330" y="235" width="190" height="195"/>
+    <rect x="1360" y="265" width="52" height="45" fill-opacity="0.25"/>
+    <rect x="1438" y="265" width="52" height="45" fill-opacity="0.25"/>
+    <rect x="1360" y="335" width="130" height="95" fill-opacity="0.2"/>
+
+    <!-- Modern SUV / Family Car Silhouette (Foreground Right) -->
+    <g transform="translate(1015, 285)">
+      <!-- Car Body -->
+      <path d="M25,95 L42,42 Q50,24 72,22 L195,22 Q220,22 238,45 L268,78 L315,86 Q332,90 335,108 L335,132 Q335,142 322,142 L292,142 A34,34 0 0,0 224,142 L118,142 A34,34 0 0,0 50,142 L20,142 Q10,142 10,130 L10,108 Q10,97 25,95 Z" fill-opacity="0.26" stroke-width="3"/>
+      <!-- Car Windows -->
+      <polygon points="56,82 70,36 142,36 142,82" fill-opacity="0.35"/>
+      <polygon points="154,36 212,36 248,82 154,82" fill-opacity="0.35"/>
+      <!-- Headlight & Grille -->
+      <rect x="312" y="96" width="20" height="14" rx="4" fill-opacity="0.5"/>
+      <line x1="15" y1="104" x2="32" y2="104" stroke-width="3"/>
+      <line x1="148" y1="98" x2="168" y2="98" stroke-width="2.5"/>
+      <line x1="238" y1="98" x2="256" y2="98" stroke-width="2.5"/>
+      <!-- Wheels -->
+      <circle cx="84" cy="142" r="28" fill-opacity="0.35" stroke-width="3.5"/>
+      <circle cx="84" cy="142" r="13" fill-opacity="0.5"/>
+      <circle cx="258" cy="142" r="28" fill-opacity="0.35" stroke-width="3.5"/>
+      <circle cx="258" cy="142" r="13" fill-opacity="0.5"/>
+    </g>
+
+    <!-- Second Sedan Car Outline (Mid Right) -->
+    <g transform="translate(820, 325) scale(0.78)">
+      <path d="M20,85 L48,40 Q58,26 80,26 L180,26 Q204,26 224,48 L272,58 Q288,62 290,78 L290,102 L248,102 A28,28 0 0,0 192,102 L98,102 A28,28 0 0,0 42,102 L12,102 L12,90 Z" fill-opacity="0.18"/>
+      <circle cx="70" cy="102" r="22" fill-opacity="0.28"/>
+      <circle cx="220" cy="102" r="22" fill-opacity="0.28"/>
+    </g>
+  </g>
+
+  <!-- Ground Baseline -->
+  <line x1="0" y1="430" x2="1600" y2="430" stroke="#ffffff" stroke-width="2" stroke-opacity="0.4"/>
+</svg>

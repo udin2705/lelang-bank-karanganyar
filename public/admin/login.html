@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Admin - Portal Aset BPR Bank Karanganyar</title>
+<link rel="stylesheet" href="/css/style.css?v=2">
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="brand-logo" style="height:64px;"><img src="/img/logo.png" alt="Logo PT. BPR Bank Karanganyar (Perseroda)"></div>
+    <h2>Admin Portal Aset</h2>
+    <p class="sub">PT. BPR Bank Karanganyar (Perseroda)</p>
+
+    <div id="alertBox"></div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Masuk</button>
+    </form>
+
+    <p style="text-align:center; margin-top:18px;"><a href="/" style="color:var(--primary); font-size:0.85rem;">&larr; Kembali ke Portal Publik</a></p>
+  </div>
+</div>
+
+<script src="/js/common.js?v=2"></script>
+<script>
+  const loginForm = document.getElementById('loginForm');
+  const alertBox = document.getElementById('alertBox');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    alertBox.innerHTML = '';
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      await apiFetch('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      });
+      window.location.href = '/admin/dashboard.html';
+    } catch (err) {
+      alertBox.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+    }
+  });
+</script>
+</body>
+</html>

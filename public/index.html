@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Aset Jaminan - PT. BPR Bank Karanganyar (Perseroda)</title>
+<link rel="stylesheet" href="/css/style.css?v=8">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="brand">
+      <div class="brand-logo"><img src="/img/logo.png" alt="Logo PT. BPR Bank Karanganyar (Perseroda)"></div>
+      <div>
+        <span class="text">BPR Bank Karanganyar</span>
+        <small>Portal Penjualan Aset Jaminan</small>
+      </div>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="/" class="active">Beranda</a>
+      <a href="/index.html?kategori=tanah_bangunan">Tanah &amp; Bangunan</a>
+      <a href="/index.html?kategori=kendaraan">Kendaraan</a>
+      <a href="/admin/login.html">Admin</a>
+    </nav>
+    <button class="nav-toggle" onclick="toggleMobileNav()" aria-label="Menu">&#9776;</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Cari Aset Impian Anda</h1>
+    <p>Daftar aset properti dan kendaraan agunan PT. BPR Bank Karanganyar (Perseroda)</p>
+
+    <form class="search-box" id="searchForm">
+      <input type="text" id="qInput" placeholder="Cari judul, lokasi, atau kode aset...">
+      <select id="provinsiInput"><option value="">Semua Provinsi</option></select>
+      <select id="kabupatenInput" disabled><option value="">Semua Kabupaten/Kota</option></select>
+      <select id="kecamatanInput" disabled><option value="">Semua Kecamatan</option></select>
+      <select id="sortInput">
+        <option value="">Urutkan: Terbaru</option>
+        <option value="harga_asc">Harga Terendah</option>
+        <option value="harga_desc">Harga Tertinggi</option>
+      </select>
+      <button type="submit">Cari</button>
+    </form>
+
+    <div class="category-tabs" id="categoryTabs">
+      <button data-kategori="" class="active">Semua</button>
+      <button data-kategori="tanah_bangunan">Tanah &amp; Bangunan</button>
+      <button data-kategori="kendaraan">Kendaraan</button>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="listing-layout">
+    <aside class="filter-panel">
+      <h3>Filter Aset</h3>
+      <div class="filter-group">
+        <label>Tipe Penjualan</label>
+        <select id="tipeFilter">
+          <option value="">Semua Tipe</option>
+          <option value="pra_lelang">Pra-Lelang</option>
+          <option value="lelang">Lelang</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Status</label>
+        <select id="statusFilter">
+          <option value="">Tersedia</option>
+          <option value="terjual">Terjual</option>
+          <option value="semua">Semua Status</option>
+        </select>
+      </div>
+      <button class="filter-reset" id="resetFilter">Reset Filter</button>
+    </aside>
+
+    <div>
+      <div class="result-bar">
+        <span class="count" id="resultCount">Memuat data...</span>
+      </div>
+      <div id="assetContainer" class="asset-grid"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <strong>PT. BPR Bank Karanganyar (Perseroda)</strong><br>
+      Jl. Lawu Timur No. 135, Kabupaten Karanganyar, Jawa Tengah 57714
+    </div>
+    <div class="copy">&copy; 2026 BPR Bank Karanganyar. Seluruh hak cipta dilindungi.</div>
+  </div>
+</footer>
+
+<script src="/js/wilayah.js?v=8"></script>
+<script src="/js/common.js?v=8"></script>
+<script src="/js/index.js?v=8"></script>
+</body>
+</html>

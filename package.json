@@ -1,0 +1,21 @@
+{
+  "name": "marketplace-aset-bank-karanganyar",
+  "version": "1.0.0",
+  "description": "Portal Marketplace Aset Jaminan Debitur Macet - PT. BPR Bank Karanganyar (Perseroda)",
+  "main": "server/app.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server/app.js",
+    "seed": "node server/db/seed.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}
+
