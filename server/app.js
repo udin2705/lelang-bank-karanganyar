@@ -71,8 +71,18 @@ app.get('/detail.html', (req, res, next) => {
       const imageUrl = firstImg
         ? `${baseUrl}/uploads/${encodeURIComponent(firstImg.filename)}`
         : `${baseUrl}/img/logo.png`;
-      const imgExt = firstImg ? path.extname(firstImg.filename).toLowerCase() : '.png';
-      const imgMime = imgExt === '.png' ? 'image/png' : imgExt === '.webp' ? 'image/webp' : 'image/jpeg';
+      let imgMime = 'image/jpeg';
+      if (firstImg) {
+        try {
+          const imgPath = path.join(__dirname, '..', 'public', 'uploads', firstImg.filename);
+          const fd = fs.openSync(imgPath, 'r');
+          const buf = Buffer.alloc(4);
+          fs.readSync(fd, buf, 0, 4, 0);
+          fs.closeSync(fd);
+          if (buf[0] === 0x89 && buf[1] === 0x50) imgMime = 'image/png';
+          else if (buf[0] === 0xff && buf[1] === 0xd8) imgMime = 'image/jpeg';
+        } catch (e) { /* default image/jpeg */ }
+      }
 
       const tipeLabel = asset.tipe_penjualan === 'lelang' ? 'Lelang' : 'Pra-Lelang';
       const hargaFormatted = formatRupiahServer(asset.harga);
@@ -118,6 +128,25 @@ app.get('/detail.html', (req, res, next) => {
       return res.send(html);
     }
   });
+});
+
+// Pastikan header Content-Type gambar di /uploads sesuai isi byte file (untuk WhatsApp crawler)
+app.use('/uploads', (req, res, next) => {
+  const filePath = path.join(__dirname, '..', 'public', 'uploads', path.basename(req.path));
+  try {
+    if (fs.existsSync(filePath)) {
+      const fd = fs.openSync(filePath, 'r');
+      const buf = Buffer.alloc(4);
+      fs.readSync(fd, buf, 0, 4, 0);
+      fs.closeSync(fd);
+      if (buf[0] === 0xff && buf[1] === 0xd8) {
+        res.setHeader('Content-Type', 'image/jpeg');
+      } else if (buf[0] === 0x89 && buf[1] === 0x50) {
+        res.setHeader('Content-Type', 'image/png');
+      }
+    }
+  } catch (e) { /* lanjutkan */ }
+  next();
 });
 
 // Static files (frontend public + hasil upload gambar)
