@@ -4,15 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Admin - Portal Aset BPR Bank Karanganyar</title>
-<link rel="stylesheet" href="/css/style.css?v=8">
+<link rel="stylesheet" href="/css/style.css?v=10">
 </head>
 <body>
 
 <div class="admin-layout">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeAdminSidebar()"></div>
   <aside class="admin-sidebar" id="adminSidebar">
-    <div class="brand">
-      <div class="brand-logo"><img src="/img/logo.png" alt="Logo PT. BPR Bank Karanganyar (Perseroda)"></div>
-      <div style="margin-top:8px; font-size:0.9rem;">Admin Portal Aset</div>
+    <div class="brand" style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+      <div>
+        <div class="brand-logo"><img src="/img/logo.png" alt="Logo PT. BPR Bank Karanganyar (Perseroda)"></div>
+        <div style="margin-top:8px; font-size:0.9rem;">Admin Portal Aset</div>
+      </div>
+      <button type="button" class="sidebar-close-btn" onclick="closeAdminSidebar()" aria-label="Tutup Menu">&times;</button>
     </div>
     <nav>
       <a href="#" id="navDashboardAssets" class="active">&#128202; Dashboard Aset</a>
@@ -139,8 +143,8 @@
   </div>
 </div>
 
-<script src="/js/wilayah.js?v=9"></script>
-<script src="/js/common.js?v=9"></script>
-<script src="/js/admin.js?v=9"></script>
+<script src="/js/wilayah.js?v=10"></script>
+<script src="/js/common.js?v=10"></script>
+<script src="/js/admin.js?v=10"></script>
 </body>
 </html>

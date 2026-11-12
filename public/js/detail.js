@@ -15,6 +15,7 @@
       ? `
         <tr><td>Tipe Penjualan</td><td>Lelang KPKNL</td></tr>
         <tr><td>Tanggal Lelang</td><td>${asset.tanggal_lelang ? formatTanggal(asset.tanggal_lelang) : 'Menunggu Jadwal KPKNL'}</td></tr>
+        ${asset.uang_jaminan ? `<tr><td>Nilai Uang Jaminan</td><td>${formatRupiah(asset.uang_jaminan)}</td></tr>` : ''}
         ${asset.link_lelang ? `<tr><td>Tautan Lelang</td><td><a href="${asset.link_lelang}" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">Buka di lelang.go.id &rarr;</a></td></tr>` : ''}
       `
       : `<tr><td>Tipe Penjualan</td><td>Pra-Lelang (Penjualan Sukarela / Damai)</td></tr>`;
@@ -101,6 +102,11 @@
             <span>&#128197; Tanggal Lelang:</span>
             <strong>${asset.tanggal_lelang ? formatTanggal(asset.tanggal_lelang) : 'Menunggu Jadwal KPKNL'}</strong>
           </div>
+          ${asset.uang_jaminan ? `
+          <div class="lelang-date-row" style="margin-top:6px; padding-top:6px; border-top:1px dashed #fcd34d;">
+            <span>&#128176; Nilai Uang Jaminan:</span>
+            <strong style="color:var(--primary-dark);">${formatRupiah(asset.uang_jaminan)}</strong>
+          </div>` : ''}
           ${asset.link_lelang ? `<a href="${asset.link_lelang}" target="_blank" rel="noopener noreferrer" class="btn-block btn-lelang">&#128279; Ikuti Lelang di lelang.go.id</a>` : ''}
         </div>
       `
@@ -140,13 +146,13 @@
             <div class="spec-box">${specSidebar}</div>
             <a href="https://wa.me/${waPhone}?text=${encodeURIComponent('Saya tertarik dengan aset ' + asset.judul + ' (Kode: ' + asset.kode_aset + ')')}" target="_blank" rel="noopener noreferrer" class="btn-block btn-whatsapp">Hubungi Kami (WhatsApp)</a>
             <a href="tel:0271495489" class="btn-block btn-outline">(0271) 495-489</a>
-            <p class="jam-op">Jam operasional: Senin-Jumat, 07.30-16.30 WIB</p>
+            <p class="jam-op">Jam operasional: Senin-Jumat, 07.30 - 16.00 WIB</p>
           </div>
         </aside>
       </div>
 
       <div class="publish-bar">
-        <span>Dipublikasikan pada ${formatTanggal(asset.created_at)} &middot; dikelola oleh Kantor Pusat Operasional</span>
+        <span>Dipublikasikan pada ${formatTanggal(asset.created_at)} &middot; dikelola oleh BPR Bank Karanganyar</span>
         <span class="kategori-tag">${kategoriLabel(asset.kategori)}</span>
       </div>
 

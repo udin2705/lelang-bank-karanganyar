@@ -108,7 +108,7 @@ router.get('/meta/provinsi', (req, res) => {
 });
 
 const ALLOWED_FIELDS = [
-  'kode_aset', 'kategori', 'tipe_penjualan', 'tanggal_lelang', 'link_lelang',
+  'kode_aset', 'kategori', 'tipe_penjualan', 'tanggal_lelang', 'link_lelang', 'uang_jaminan',
   'judul', 'deskripsi', 'harga',
   'provinsi', 'kabupaten_kota', 'kecamatan', 'alamat', 'luas_tanah', 'luas_bangunan', 'sertifikat',
   'merk', 'model', 'tahun', 'no_polisi', 'warna', 'spesifikasi', 'fasilitas',
@@ -149,31 +149,38 @@ router.post('/', requireLogin, (req, res) => {
   if (!data.kode_aset || !data.kategori || !data.judul || !req.body.harga || !data.no_whatsapp) {
     return res.status(400).json({ ok: false, message: 'Kode aset, kategori, judul, harga, dan nomor WhatsApp wajib diisi.' });
   }
-  data.harga = Number(req.body.harga);
+  data.harga = Number(String(req.body.harga).replace(/\./g, '')) || 0;
+  data.uang_jaminan = data.uang_jaminan !== null ? (Number(String(data.uang_jaminan).replace(/\./g, '')) || null) : null;
   data.tipe_penjualan = data.tipe_penjualan || 'pra_lelang';
   data.status = data.status || 'tersedia';
-  data.kantor_cabang = 'Kantor Pusat Operasional';
+  data.kantor_cabang = 'BPR Bank Karanganyar';
   if (data.tipe_penjualan !== 'lelang') {
     data.tanggal_lelang = null;
     data.link_lelang = null;
+    data.uang_jaminan = null;
   }
   if (data.kategori === 'kendaraan') {
     data.fasilitas = null;
   }
 
+  const rawPubDate = req.body.tanggal_publikasi ? String(req.body.tanggal_publikasi).trim() : '';
+  data.created_at = /^\d{4}-\d{2}-\d{2}$/.test(rawPubDate)
+    ? `${rawPubDate} 08:00:00`
+    : new Date().toISOString().slice(0, 19).replace('T', ' ');
+
   try {
     const stmt = db.prepare(`
       INSERT INTO assets (
-        kode_aset, kategori, tipe_penjualan, tanggal_lelang, link_lelang,
+        kode_aset, kategori, tipe_penjualan, tanggal_lelang, link_lelang, uang_jaminan,
         judul, deskripsi, harga,
         provinsi, kabupaten_kota, kecamatan, alamat, luas_tanah, luas_bangunan, sertifikat,
         merk, model, tahun, no_polisi, warna, spesifikasi, fasilitas,
-        kantor_cabang, no_whatsapp, status
-      ) VALUES (@kode_aset, @kategori, @tipe_penjualan, @tanggal_lelang, @link_lelang,
+        kantor_cabang, no_whatsapp, status, created_at
+      ) VALUES (@kode_aset, @kategori, @tipe_penjualan, @tanggal_lelang, @link_lelang, @uang_jaminan,
         @judul, @deskripsi, @harga,
         @provinsi, @kabupaten_kota, @kecamatan, @alamat, @luas_tanah, @luas_bangunan, @sertifikat,
         @merk, @model, @tahun, @no_polisi, @warna, @spesifikasi, @fasilitas,
-        @kantor_cabang, @no_whatsapp, @status)
+        @kantor_cabang, @no_whatsapp, @status, @created_at)
     `);
     const info = stmt.run(data);
     const created = db.prepare('SELECT * FROM assets WHERE id = ?').get(info.lastInsertRowid);
@@ -195,31 +202,47 @@ router.put('/:id', requireLogin, (req, res) => {
   if (!data.no_whatsapp) {
     return res.status(400).json({ ok: false, message: 'Nomor WhatsApp wajib diisi.' });
   }
-  data.harga = req.body.harga !== undefined ? Number(req.body.harga) : existing.harga;
+  data.harga = req.body.harga !== undefined ? (Number(String(req.body.harga).replace(/\./g, '')) || 0) : existing.harga;
+  data.uang_jaminan = data.uang_jaminan !== null ? (Number(String(data.uang_jaminan).replace(/\./g, '')) || null) : null;
   data.tipe_penjualan = data.tipe_penjualan || 'pra_lelang';
   data.status = data.status || 'tersedia';
-  data.kantor_cabang = 'Kantor Pusat Operasional';
+  data.kantor_cabang = 'BPR Bank Karanganyar';
   if (data.tipe_penjualan !== 'lelang') {
     data.tanggal_lelang = null;
     data.link_lelang = null;
+    data.uang_jaminan = null;
   }
   if (data.kategori === 'kendaraan') {
     data.fasilitas = null;
   }
+
+  const rawPubDate = req.body.tanggal_publikasi ? String(req.body.tanggal_publikasi).trim() : '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(rawPubDate)) {
+    const existingDatePart = existing.created_at ? String(existing.created_at).slice(0, 10) : '';
+    const existingTimePart = existing.created_at && String(existing.created_at).length >= 19
+      ? String(existing.created_at).slice(11, 19)
+      : '08:00:00';
+    data.created_at = existingDatePart === rawPubDate
+      ? existing.created_at
+      : `${rawPubDate} ${existingTimePart}`;
+  } else {
+    data.created_at = existing.created_at || new Date().toISOString().slice(0, 19).replace('T', ' ');
+  }
+
   data.id = req.params.id;
 
   try {
     db.prepare(`
       UPDATE assets SET
         kode_aset = @kode_aset, kategori = @kategori, tipe_penjualan = @tipe_penjualan,
-        tanggal_lelang = @tanggal_lelang, link_lelang = @link_lelang,
+        tanggal_lelang = @tanggal_lelang, link_lelang = @link_lelang, uang_jaminan = @uang_jaminan,
         judul = @judul, deskripsi = @deskripsi, harga = @harga,
         provinsi = @provinsi, kabupaten_kota = @kabupaten_kota, kecamatan = @kecamatan, alamat = @alamat,
         luas_tanah = @luas_tanah, luas_bangunan = @luas_bangunan, sertifikat = @sertifikat,
         merk = @merk, model = @model, tahun = @tahun, no_polisi = @no_polisi, warna = @warna,
         spesifikasi = @spesifikasi, fasilitas = @fasilitas,
         kantor_cabang = @kantor_cabang, no_whatsapp = @no_whatsapp,
-        status = @status, updated_at = CURRENT_TIMESTAMP
+        status = @status, created_at = @created_at, updated_at = CURRENT_TIMESTAMP
       WHERE id = @id
     `).run(data);
 

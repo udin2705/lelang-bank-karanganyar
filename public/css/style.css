@@ -1233,6 +1233,25 @@ body > .container {
 /* =========================================================
    RESPONSIVE - MOBILE (<=768px) - Android / iPhone browser
    ========================================================= */
+.sidebar-backdrop {
+  display: none;
+}
+
+.sidebar-close-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.14);
+  border: none;
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px) {
   .main-nav { display: none; }
   .nav-toggle { display: block; }
@@ -1282,13 +1301,35 @@ body > .container {
   .detail-tabs { font-size: 0.8rem; }
   .detail-tabs button { padding: 10px 12px; }
 
-  .admin-sidebar { display: none; }
-  .admin-sidebar.mobile-open {
+  .sidebar-backdrop.open {
     display: block;
     position: fixed;
-    inset: 0 30% 0 0;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 998;
+    backdrop-filter: blur(2px);
+  }
+
+  .sidebar-close-btn {
+    display: inline-flex;
+  }
+
+  .admin-sidebar {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 260px;
+    max-width: 78vw;
     z-index: 999;
     overflow-y: auto;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.28);
+  }
+  .admin-sidebar.mobile-open {
+    transform: translateX(0);
   }
   .admin-main { padding: 16px; }
   .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }

@@ -54,7 +54,29 @@ function toggleMobileNav() {
 
 function toggleAdminSidebar() {
   const sidebar = document.querySelector('.admin-sidebar');
-  if (sidebar) sidebar.classList.toggle('mobile-open');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (sidebar) {
+    const isOpen = sidebar.classList.toggle('mobile-open');
+    if (backdrop) backdrop.classList.toggle('open', isOpen);
+  }
+}
+
+function closeAdminSidebar() {
+  const sidebar = document.querySelector('.admin-sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (sidebar) sidebar.classList.remove('mobile-open');
+  if (backdrop) backdrop.classList.remove('open');
+}
+
+function formatRibuanString(val) {
+  const digits = String(val === undefined || val === null ? '' : val).replace(/\D/g, '');
+  if (!digits) return '';
+  return Number(digits).toLocaleString('id-ID');
+}
+
+function parseRibuanString(val) {
+  const digits = String(val === undefined || val === null ? '' : val).replace(/\D/g, '');
+  return digits ? Number(digits) : 0;
 }
 
 // Perbarui link "Admin" di header publik menjadi langsung ke "/admin/dashboard.html" bila sesi admin masih aktif

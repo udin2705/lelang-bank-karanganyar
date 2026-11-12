@@ -217,6 +217,13 @@
       .map((p) => `<option value="${p}" ${p === selectedProv ? 'selected' : ''}>${p}</option>`)
       .join('');
 
+    const rawCreated = g('created_at');
+    const defaultPubDate = rawCreated && String(rawCreated).length >= 10
+      ? String(rawCreated).slice(0, 10)
+      : new Date().toISOString().slice(0, 10);
+    const formattedHarga = typeof formatRibuanString === 'function' ? formatRibuanString(g('harga')) : g('harga');
+    const formattedJaminan = typeof formatRibuanString === 'function' ? formatRibuanString(g('uang_jaminan')) : g('uang_jaminan');
+
     const common = `
       <div class="form-grid">
         <div class="form-group">
@@ -243,7 +250,7 @@
         </div>
         <div class="form-group">
           <label id="hargaLabelEl">${isLelang ? 'Nilai Limit Lelang (Rp) *' : 'Harga Penawaran (Rp) *'}</label>
-          <input type="number" name="harga" value="${g('harga')}" required min="0">
+          <input type="text" inputmode="numeric" class="input-ribuan" name="harga" value="${formattedHarga}" required placeholder="Contoh: 150.000.000" autocomplete="off">
         </div>
         <div class="form-group">
           <label>Status *</label>
@@ -253,6 +260,16 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label>Tanggal Publikasi / Pengumuman *</label>
+          <input type="date" name="tanggal_publikasi" value="${defaultPubDate}" required>
+          <small style="display:block; color:var(--text-muted); font-size:0.74rem; margin-top:3px;">Dapat diubah saat peralihan Pra-Lelang ke Lelang (syarat pengumuman KPKNL)</small>
+        </div>
+
+        <div class="form-group full-lelang" style="display:${isLelang ? 'block' : 'none'};">
+          <label>Nilai Uang Jaminan (Rp)</label>
+          <input type="text" inputmode="numeric" class="input-ribuan" name="uang_jaminan" value="${formattedJaminan}" placeholder="Contoh: 30.000.000" autocomplete="off">
+        </div>
         <div class="form-group full-lelang" style="display:${isLelang ? 'block' : 'none'};">
           <label>Tanggal Pelaksanaan Lelang</label>
           <input type="date" name="tanggal_lelang" value="${g('tanggal_lelang')}">
@@ -389,6 +406,16 @@
       const isLelang = tipePenjualanSelect.value === 'lelang';
       hargaLabelEl.textContent = isLelang ? 'Nilai Limit Lelang (Rp) *' : 'Harga Penawaran (Rp) *';
       document.querySelectorAll('.full-lelang').forEach((el) => (el.style.display = isLelang ? 'block' : 'none'));
+    });
+
+    // Auto-format titik ribuan saat mengetik pada input Harga & Nilai Uang Jaminan
+    assetForm.querySelectorAll('.input-ribuan').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const formatted = typeof formatRibuanString === 'function'
+          ? formatRibuanString(inp.value)
+          : inp.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        inp.value = formatted;
+      });
     });
 
     const provinsiSelect = document.getElementById('provinsiSelect');
@@ -601,6 +628,12 @@
     const fd = new FormData(assetForm);
     const payload = {};
     fd.forEach((value, key) => { if (key !== 'images') payload[key] = value; });
+    if (payload.harga !== undefined) {
+      payload.harga = String(payload.harga).replace(/\./g, '');
+    }
+    if (payload.uang_jaminan !== undefined && payload.uang_jaminan !== '') {
+      payload.uang_jaminan = String(payload.uang_jaminan).replace(/\./g, '');
+    }
     const manualKecEl = document.getElementById('kecamatanManualInput');
     if (payload.kecamatan === '__manual__') {
       payload.kecamatan = manualKecEl ? manualKecEl.value.trim() : '';
@@ -661,6 +694,7 @@
       navAdminUsers.classList.remove('active');
       sectionAssets.style.display = 'block';
       sectionUsers.style.display = 'none';
+      if (typeof closeAdminSidebar === 'function') closeAdminSidebar();
     });
 
     navAdminUsers.addEventListener('click', (e) => {
@@ -669,6 +703,7 @@
       navDashboardAssets.classList.remove('active');
       sectionAssets.style.display = 'none';
       sectionUsers.style.display = 'block';
+      if (typeof closeAdminSidebar === 'function') closeAdminSidebar();
       loadAdminUsers();
     });
   }
