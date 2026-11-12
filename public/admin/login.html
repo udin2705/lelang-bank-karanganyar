@@ -32,10 +32,20 @@
   </div>
 </div>
 
-<script src="/js/common.js?v=2"></script>
+<script src="/js/common.js?v=9"></script>
 <script>
   const loginForm = document.getElementById('loginForm');
   const alertBox = document.getElementById('alertBox');
+
+  // Cek otomatis: jika session cookie admin masih aktif, langsung masuk ke dashboard
+  (async function checkAlreadyLoggedIn() {
+    try {
+      const me = await apiFetch('/api/auth/me');
+      if (me && me.loggedIn) {
+        window.location.replace('/admin/dashboard.html');
+      }
+    } catch (e) { /* belum login */ }
+  })();
 
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();

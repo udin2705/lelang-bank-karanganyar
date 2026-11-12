@@ -57,6 +57,19 @@ function toggleAdminSidebar() {
   if (sidebar) sidebar.classList.toggle('mobile-open');
 }
 
+// Perbarui link "Admin" di header publik menjadi langsung ke "/admin/dashboard.html" bila sesi admin masih aktif
+document.addEventListener('DOMContentLoaded', async () => {
+  const adminNavLink = document.querySelector('.main-nav a[href*="/admin/"]');
+  if (!adminNavLink) return;
+  try {
+    const me = await apiFetch('/api/auth/me');
+    if (me && me.loggedIn) {
+      adminNavLink.href = '/admin/dashboard.html';
+      adminNavLink.textContent = 'Dashboard Admin';
+    }
+  } catch (e) { /* abaikan */ }
+});
+
 // Helper pendeteksi perangkat mobile (Android / iPhone / iPad)
 function isMobileBrowser() {
   const ua = navigator.userAgent || navigator.vendor || window.opera || '';

@@ -46,6 +46,25 @@ app.use(
   })
 );
 
+// Redirect otomatis jika admin sudah login dan mengakses halaman login /admin
+app.get(['/admin', '/admin/', '/admin/login.html'], (req, res, next) => {
+  if (req.session && req.session.adminId) {
+    return res.redirect('/admin/dashboard.html');
+  }
+  if (req.path === '/admin' || req.path === '/admin/') {
+    return res.redirect('/admin/login.html');
+  }
+  next();
+});
+
+// Proteksi halaman dashboard.html di sisi server jika belum login
+app.get('/admin/dashboard.html', (req, res, next) => {
+  if (!req.session || !req.session.adminId) {
+    return res.redirect('/admin/login.html');
+  }
+  next();
+});
+
 // Dynamic Open Graph Meta Tags untuk halaman detail aset (pratinjau WhatsApp / Facebook)
 app.get('/detail.html', (req, res, next) => {
   const assetId = req.query.id;
